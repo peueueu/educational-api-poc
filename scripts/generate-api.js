@@ -21,11 +21,11 @@ class APIGenerator {
     readFrontmatter(content) {
         const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
         const match = content.match(frontmatterRegex);
-        
+
         if (!match) {
             return { frontmatter: {}, content: content };
         }
-        
+
         return {
             frontmatter: this.parseFrontmatter(match[1]),
             content: match[2].trim()
@@ -35,20 +35,20 @@ class APIGenerator {
     parseFrontmatter(frontmatterText) {
         const lines = frontmatterText.split('\n');
         const data = {};
-        
+
         for (const line of lines) {
             const colonIndex = line.indexOf(':');
             if (colonIndex > 0) {
                 const key = line.substring(0, colonIndex).trim();
                 let value = line.substring(colonIndex + 1).trim();
-                
+
                 // Handle arrays
                 if (value.startsWith('[') && value.endsWith(']')) {
                     value = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]/g, ''));
                 }
                 // Handle quoted strings
-                else if ((value.startsWith('"') && value.endsWith('"')) || 
-                         (value.startsWith("'") && value.endsWith("'"))) {
+                else if ((value.startsWith('"') && value.endsWith('"')) ||
+                    (value.startsWith("'") && value.endsWith("'"))) {
                     value = value.slice(1, -1);
                 }
                 // Handle booleans
@@ -61,11 +61,11 @@ class APIGenerator {
                 else if (!isNaN(value) && value !== '') {
                     value = Number(value);
                 }
-                
+
                 data[key] = value;
             }
         }
-        
+
         return data;
     }
 
@@ -74,14 +74,14 @@ class APIGenerator {
         if (!fs.existsSync(themesDir)) return;
 
         const themeFolders = fs.readdirSync(themesDir);
-        
+
         for (const folder of themeFolders) {
             const themeDir = path.join(themesDir, folder);
             if (!fs.statSync(themeDir).isDirectory()) continue;
 
             const metadataPath = path.join(themeDir, 'metadata.md');
             const descriptionPath = path.join(themeDir, 'description.md');
-            
+
             if (!fs.existsSync(metadataPath)) continue;
 
             const metadataContent = fs.readFileSync(metadataPath, 'utf8');
@@ -110,20 +110,20 @@ class APIGenerator {
         if (!fs.existsSync(topicsDir)) return;
 
         const themeFolders = fs.readdirSync(topicsDir);
-        
+
         for (const themeFolder of themeFolders) {
             const themeTopicsDir = path.join(topicsDir, themeFolder);
             if (!fs.statSync(themeTopicsDir).isDirectory()) continue;
 
             const topicFolders = fs.readdirSync(themeTopicsDir);
-            
+
             for (const topicFolder of topicFolders) {
                 const topicDir = path.join(themeTopicsDir, topicFolder);
                 if (!fs.statSync(topicDir).isDirectory()) continue;
 
                 const metadataPath = path.join(topicDir, 'metadata.md');
                 const contentPath = path.join(topicDir, 'content.md');
-                
+
                 if (!fs.existsSync(metadataPath)) continue;
 
                 const metadataContent = fs.readFileSync(metadataPath, 'utf8');
@@ -154,19 +154,19 @@ class APIGenerator {
         if (!fs.existsSync(exercisesDir)) return;
 
         const themeFolders = fs.readdirSync(exercisesDir);
-        
+
         for (const themeFolder of themeFolders) {
             const themeExercisesDir = path.join(exercisesDir, themeFolder);
             if (!fs.statSync(themeExercisesDir).isDirectory()) continue;
 
             const topicFolders = fs.readdirSync(themeExercisesDir);
-            
+
             for (const topicFolder of topicFolders) {
                 const topicExercisesDir = path.join(themeExercisesDir, topicFolder);
                 if (!fs.statSync(topicExercisesDir).isDirectory()) continue;
 
                 const exerciseFolders = fs.readdirSync(topicExercisesDir);
-                
+
                 for (const exerciseFolder of exerciseFolders) {
                     const exerciseDir = path.join(topicExercisesDir, exerciseFolder);
                     if (!fs.statSync(exerciseDir).isDirectory()) continue;
@@ -174,7 +174,7 @@ class APIGenerator {
                     const metadataPath = path.join(exerciseDir, 'metadata.md');
                     const instructionsPath = path.join(exerciseDir, 'instructions.md');
                     const solutionPath = path.join(exerciseDir, 'solution.md');
-                    
+
                     if (!fs.existsSync(metadataPath)) continue;
 
                     const metadataContent = fs.readFileSync(metadataPath, 'utf8');
@@ -216,26 +216,26 @@ class APIGenerator {
         if (!fs.existsSync(videosDir)) return;
 
         const themeFolders = fs.readdirSync(videosDir);
-        
+
         for (const themeFolder of themeFolders) {
             const themeVideosDir = path.join(videosDir, themeFolder);
             if (!fs.statSync(themeVideosDir).isDirectory()) continue;
 
             const topicFolders = fs.readdirSync(themeVideosDir);
-            
+
             for (const topicFolder of topicFolders) {
                 const topicVideosDir = path.join(themeVideosDir, topicFolder);
                 if (!fs.statSync(topicVideosDir).isDirectory()) continue;
 
                 const videoFolders = fs.readdirSync(topicVideosDir);
-                
+
                 for (const videoFolder of videoFolders) {
                     const videoDir = path.join(topicVideosDir, videoFolder);
                     if (!fs.statSync(videoDir).isDirectory()) continue;
 
                     const metadataPath = path.join(videoDir, 'metadata.md');
                     const transcriptPath = path.join(videoDir, 'transcript.md');
-                    
+
                     if (!fs.existsSync(metadataPath)) continue;
 
                     const metadataContent = fs.readFileSync(metadataPath, 'utf8');
@@ -498,31 +498,31 @@ class APIGenerator {
 
     generate() {
         console.log('🚀 Iniciando geração da API...');
-        
+
         this.ensureApiDir();
-        
+
         console.log('📖 Processando temas...');
         this.processThemes();
         console.log(`   ✅ ${this.themes.size} temas processados`);
-        
+
         console.log('📚 Processando tópicos...');
         this.processTopics();
         console.log(`   ✅ ${this.topics.size} tópicos processados`);
-        
+
         console.log('🏋️ Processando exercícios...');
         this.processExercises();
         console.log(`   ✅ ${this.exercises.size} exercícios processados`);
-        
+
         console.log('🎥 Processando vídeos...');
         this.processVideos();
         console.log(`   ✅ ${this.videos.size} vídeos processados`);
-        
+
         console.log('📝 Gerando APIs...');
         this.generateThemeAPIs();
         this.generateTopicAPIs();
         this.generateExerciseAPIs();
         this.generateVideoAPIs();
-        
+
         console.log('✨ API gerada com sucesso!');
         console.log(`📊 Estatísticas:`);
         console.log(`   - ${this.themes.size} temas`);
@@ -535,12 +535,12 @@ class APIGenerator {
 function main() {
     const contentDir = path.join(__dirname, '..', 'content');
     const apiDir = path.join(__dirname, '..', 'api');
-    
+
     if (!fs.existsSync(contentDir)) {
         console.error('❌ Pasta content/ não encontrada');
         process.exit(1);
     }
-    
+
     const generator = new APIGenerator(contentDir, apiDir);
     generator.generate();
 }

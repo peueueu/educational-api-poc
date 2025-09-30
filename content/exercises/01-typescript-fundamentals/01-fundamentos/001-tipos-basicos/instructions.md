@@ -6,7 +6,7 @@ Praticar a declaração e uso de tipos básicos em TypeScript, incluindo strings
 
 ## 📋 Instruções
 
-Crie um arquivo `tipos-basicos.ts` e implemente as seguintes variáveis com os tipos corretos:
+Crie um arquivo `tipos-basicos.ts` e implemente as seguintes variáveis com os tipos CORRETOS:
 
 ### Parte 1: Tipos Primitivos
 
