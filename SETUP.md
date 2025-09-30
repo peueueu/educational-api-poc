@@ -24,7 +24,7 @@ git push origin main
 
 1. Vá para **Settings** → **Pages** no seu repositório
 2. Em **Source**, selecione **GitHub Actions**
-3. Salve as configurações
+3. Salve as configurações.
 
 ### 3. Configurar Permissões do GitHub Actions
 
